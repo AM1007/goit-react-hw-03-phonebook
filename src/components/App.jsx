@@ -7,7 +7,6 @@ import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 
 export class App extends Component {
-  
   state = {
     contacts: [
       { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -20,10 +19,9 @@ export class App extends Component {
 
   formSubmit = ({ name, number }) => {
     const contact = { id: nanoid(), name, number };
-    
-    if (this.state.contacts.some(e => e.name === name)) {
 
-    return alert(`${name} is already in contacts!`);
+    if (this.state.contacts.some(e => e.name === name)) {
+      return alert(`${name} is already in contacts!`);
     }
 
     this.setState(({ contacts }) => ({ contacts: [contact, ...contacts] }));
@@ -32,8 +30,7 @@ export class App extends Component {
   getFilteredContacts = () => {
     const { contacts, filter } = this.state;
     const filterContactsList = contacts.filter(contact => {
-
-    return contact.name.toLowerCase().includes(filter.toLowerCase());
+      return contact.name.toLowerCase().includes(filter.toLowerCase());
     });
 
     return filterContactsList;
@@ -44,22 +41,33 @@ export class App extends Component {
 
     this.setState({ [name]: value });
   };
-  
+
   deleteContact = contactId => {
-    
     this.setState(prevState => ({
       contacts: prevState.contacts.filter(contact => contact.id !== contactId),
     }));
   };
 
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   render() {
-    const {filter} = this.state;
+    const { filter } = this.state;
 
     return (
       <div>
-        <h1>
-          Phonebook
-        </h1>
+        <h1>Phonebook</h1>
         <Section title="Phonebook">
           <ContactForm onSubmit={this.formSubmit} />
         </Section>
