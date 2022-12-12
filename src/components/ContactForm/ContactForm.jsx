@@ -45,6 +45,7 @@ export class ContactForm extends Component {
             required
           />
         </Label>
+
         <Label htmlFor={this.NumberInputId}>
           Number
           <Input
@@ -59,11 +60,13 @@ export class ContactForm extends Component {
             required
           />
         </Label>
+
         <ButtonForm type="submit">Add contact</ButtonForm>
       </Form>
     );
   }
 }
+
 ContactForm.propTypes = {
   name: PropTypes.string,
   value: PropTypes.string,
